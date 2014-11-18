@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/settings_show_campus_header"
+        android:key="settings_show_campus_header">
+
+        <SwitchPreference
+            android:key="show_keskusta"
+            android:title="Keskusta"
+            android:defaultValue="true" />
+
+        <SwitchPreference
+            android:key="show_kumpula"
+            android:title="Kumpula"
+            android:defaultValue="true" />
+
+        <SwitchPreference
+            android:key="show_meilahti"
+            android:title="Meilahti"
+            android:defaultValue="true" />
+
+        <SwitchPreference
+            android:key="show_ruskeasuo"
+            android:title="Ruskeasuo"
+            android:defaultValue="true" />
+
+        <SwitchPreference
+            android:key="show_viikki"
+            android:title="Viikki"
+            android:defaultValue="true" />
+
+        <SwitchPreference
+            android:key="show_metropolia"
+            android:title="Metropolia"
+            android:defaultValue="true" />
+
+        <SwitchPreference
+            android:key="show_yths"
+            android:title="YTHS"
+            android:defaultValue="true" />
+
+    </PreferenceCategory>
+</PreferenceScreen>
