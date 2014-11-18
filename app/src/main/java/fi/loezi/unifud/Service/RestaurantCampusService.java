@@ -1,4 +1,4 @@
-package fi.loezi.unifud.Service;
+package fi.loezi.unifud.service;
 
 import java.util.HashMap;
 import java.util.Map;

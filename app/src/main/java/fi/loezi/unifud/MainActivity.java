@@ -17,13 +17,12 @@ import android.widget.TextView;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import fi.loezi.unifud.Service.RestaurantCampusService;
-import fi.loezi.unifud.Service.UnicafeAPI;
+import fi.loezi.unifud.service.RestaurantCampusService;
+import fi.loezi.unifud.service.UnicafeAPI;
 import fi.loezi.unifud.model.Restaurant;
 
 public class MainActivity extends Activity {

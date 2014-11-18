@@ -1,4 +1,4 @@
-package fi.loezi.unifud.Service;
+package fi.loezi.unifud.service;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

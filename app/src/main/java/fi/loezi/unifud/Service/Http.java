@@ -1,4 +1,4 @@
-package fi.loezi.unifud.Service;
+package fi.loezi.unifud.service;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
