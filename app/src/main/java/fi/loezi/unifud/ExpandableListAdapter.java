@@ -11,28 +11,24 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
+import fi.loezi.unifud.model.Restaurant;
+
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     private Context context;
-    private List<String> restaurantNames;
+    private List<Restaurant> restaurants;
     private Map<String, List<String>> restaurantMeals;
 
-    public ExpandableListAdapter(final Context context,
-                                 final List<String> restaurantNames,
-                                 final Map<String, List<String>> restaurantMeals) {
+    public ExpandableListAdapter(final Context context, final List<Restaurant> restaurants) {
 
         this.context = context;
-        this.restaurantNames = restaurantNames;
-        this.restaurantMeals = restaurantMeals;
+        this.restaurants = restaurants;
     }
 
     @Override
     public Object getChild(final int groupPosition, final int childPosititon) {
 
-        final String restaurantName = restaurantNames.get(groupPosition);
-        final String meal = restaurantMeals.get(restaurantName).get(childPosititon);
-
-        return meal;
+        return restaurants.get(groupPosition).getMenu().get(childPosititon).getName();
     }
 
     @Override
@@ -64,22 +60,19 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public int getChildrenCount(final int groupPosition) {
 
-        final String restaurantName = restaurantNames.get(groupPosition);
-        final List<String> meals = restaurantMeals.get(restaurantName);
-
-        return meals.size();
+        return restaurants.get(groupPosition).getMenu().size();
     }
 
     @Override
     public Object getGroup(final int groupPosition) {
 
-        return this.restaurantNames.get(groupPosition);
+        return this.restaurants.get(groupPosition).getName();
     }
 
     @Override
     public int getGroupCount() {
 
-        return this.restaurantNames.size();
+        return this.restaurants.size();
     }
 
     @Override

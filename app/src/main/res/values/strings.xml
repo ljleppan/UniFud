@@ -10,4 +10,6 @@
     <string name="dialog_close">OK</string>
     <string name="settings_show_campus_header">Shown campuses</string>
 
+    <string name="settings_general">General</string>
+
 </resources>
