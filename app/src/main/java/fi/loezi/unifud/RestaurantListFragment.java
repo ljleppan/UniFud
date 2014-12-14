@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
@@ -70,9 +71,10 @@ public class RestaurantListFragment extends Fragment {
             list.setAdapter(listAdapter);
         }
 
+        list.setOnItemLongClickListener(new RestaurantListLongClickListener(getActivity(), listAdapter));
         list.setOnChildClickListener(new MealClickListener(getActivity(), listAdapter));
 
-        if (shouldExpandGroups()) {
+        if(shouldExpandGroups()) {
             expandGroups();
         }
     }
@@ -82,7 +84,7 @@ public class RestaurantListFragment extends Fragment {
         return this.listAdapter;
     }
 
-    private boolean shouldExpandGroups() {
+    public boolean shouldExpandGroups() {
 
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 

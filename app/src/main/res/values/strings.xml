@@ -11,5 +11,9 @@
     <string name="settings_show_campus_header">Shown campuses</string>
 
     <string name="settings_general">General</string>
+    <string name="restaurant_business_header">Open</string>
+    <string name="restaurant_lunch_header">Lunch</string>
+    <string name="no_exceptions">none</string>
+    <string name="exceptions_header">Exceptions:</string>
 
 </resources>

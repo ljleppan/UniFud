@@ -43,11 +43,21 @@ public class MealClickListener implements ExpandableListView.OnChildClickListene
         final TextView dietsView = (TextView) dialog.findViewById(R.id.diets);
         dietsView.setText(StringUtil.toCommaSeparatedValues(meal.getDiets()));
 
-        final TextView specialContentsView = (TextView) dialog.findViewById(R.id.specialContents);
-        specialContentsView.setText(StringUtil.toCommaSeparatedValues(meal.getSpecialContents()));
+        if (meal.getSpecialContents().isEmpty()) {
+            dialog.findViewById(R.id.specialContents).setVisibility(View.GONE);
+        } else {
+            final TextView specialContentsView = (TextView) dialog.findViewById(R.id.specialContents);
+            specialContentsView.setVisibility(View.VISIBLE);
+            specialContentsView.setText(StringUtil.toCommaSeparatedValues(meal.getSpecialContents()));
+        }
 
-        final TextView notesView = (TextView) dialog.findViewById(R.id.notes);
-        notesView.setText(StringUtil.toCommaSeparatedValues(meal.getNotes()));
+        if (meal.getNotes().isEmpty()) {
+            dialog.findViewById(R.id.notes).setVisibility(View.GONE);
+        } else {
+            final TextView notesView = (TextView) dialog.findViewById(R.id.notes);
+            notesView.setVisibility(View.VISIBLE);
+            notesView.setText(StringUtil.toCommaSeparatedValues(meal.getNotes()));
+        }
 
         final TextView ingredientsView = (TextView) dialog.findViewById(R.id.ingredients);
         ingredientsView.setText(meal.getIngredients());

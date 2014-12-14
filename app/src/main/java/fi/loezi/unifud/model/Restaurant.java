@@ -11,19 +11,13 @@ public class Restaurant implements Comparable<Restaurant>, Parcelable {
     private int id;
     private String name;
     private List<Menu> menus;
+    private String address;
+    private String businessRegular;
+    private String businessException;
+    private String lunchRegular;
+    private String lunchException;
 
     public Restaurant() { }
-
-    public Restaurant(final int areaCode,
-                      final int id,
-                      final String name,
-                      final List<Menu> menus) {
-
-        this.areaCode = areaCode;
-        this.id = id;
-        this.name = name;
-        this.menus = menus;
-    }
 
     public int getAreaCode() {
 
@@ -65,6 +59,56 @@ public class Restaurant implements Comparable<Restaurant>, Parcelable {
         this.menus = menus;
     }
 
+    public String getAddress() {
+
+        return address;
+    }
+
+    public void setAddress(final String address) {
+
+        this.address = address;
+    }
+
+    public String getBusinessRegular() {
+
+        return businessRegular;
+    }
+
+    public void setBusinessRegular(final String businessRegular) {
+
+        this.businessRegular = businessRegular;
+    }
+
+    public String getBusinessException() {
+
+        return businessException;
+    }
+
+    public void setBusinessException(final String businessException) {
+
+        this.businessException = businessException;
+    }
+
+    public String getLunchRegular() {
+
+        return lunchRegular;
+    }
+
+    public void setLunchRegular(final String lunchRegular) {
+
+        this.lunchRegular = lunchRegular;
+    }
+
+    public String getLunchException() {
+
+        return lunchException;
+    }
+
+    public void setLunchException(final String lunchException) {
+
+        this.lunchException = lunchException;
+    }
+
     @Override
     public int compareTo(final Restaurant another) {
 
@@ -92,6 +136,11 @@ public class Restaurant implements Comparable<Restaurant>, Parcelable {
         this.id = in.readInt();
         this.name = in.readString();
         in.readList(this.menus, null);
+        this.address = in.readString();
+        this.businessRegular = in.readString();
+        this.businessException = in.readString();
+        this.lunchRegular = in.readString();
+        this.lunchException = in.readString();
     }
 
     @Override
@@ -107,6 +156,11 @@ public class Restaurant implements Comparable<Restaurant>, Parcelable {
         dest.writeInt(this.id);
         dest.writeString(this.name);
         dest.writeList(this.menus);
+        dest.writeString(this.address);
+        dest.writeString(this.businessRegular);
+        dest.writeString(this.businessException);
+        dest.writeString(this.lunchRegular);
+        dest.writeString(this.lunchException);
     }
 
     public static final Parcelable.Creator<Restaurant> CREATOR = new Parcelable.Creator<Restaurant>() {

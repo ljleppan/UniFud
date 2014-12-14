@@ -31,6 +31,7 @@ import fi.loezi.unifud.model.Menu;
 import fi.loezi.unifud.model.Restaurant;
 import fi.loezi.unifud.util.MessiApiHelper;
 import fi.loezi.unifud.RestaurantListPagerAdapter;
+import fi.loezi.unifud.util.StringUtil;
 
 public class RefreshTask extends AsyncTask<Void, Integer, List<Restaurant>> {
 
@@ -64,18 +65,21 @@ public class RefreshTask extends AsyncTask<Void, Integer, List<Restaurant>> {
 
             for (int i = 0; i < restaurantArray.length(); i++) {
 
-                final JSONObject restaurant = restaurantArray.getJSONObject(i);
+                final JSONObject restaurantJSON = restaurantArray.getJSONObject(i);
+                final Restaurant restaurant = new Restaurant();
 
-                final int areaCode = restaurant.getInt("areacode");
+                final int areaCode = restaurantJSON.getInt("areacode");
                 if(!preferences.getBoolean("show_" + MessiApiHelper.getCampus(areaCode), false)) {
                     continue;
                 }
 
-                final int id = restaurant.getInt("id");
-                final String name = restaurant.getString("name");
-                final List<Menu> menus = getMenus(id);
+                restaurant.setAreaCode(areaCode);
+                restaurant.setId(restaurantJSON.getInt("id"));
+                restaurant.setName(restaurantJSON.getString("name"));
 
-                restaurants.add(new Restaurant(areaCode, id, name, menus));
+                getRestaurantDetails(restaurant);
+
+                restaurants.add(restaurant);
 
                 publishProgress(i + 2, restaurantArray.length() + 1);
             }
@@ -89,14 +93,186 @@ public class RefreshTask extends AsyncTask<Void, Integer, List<Restaurant>> {
         return restaurants;
     }
 
-    private List<Menu> getMenus(final int restaurantId) {
+    private void getRestaurantDetails(final Restaurant restaurant) {
+
+        final String json = getJson(BASE_URL + "restaurant/" + restaurant.getId());
+
+        parseRestaurantInformation(restaurant, json);
+
+        final List<Menu> menus = parseMenus(json);
+        restaurant.setMenus(menus);
+    }
+
+    private void parseRestaurantInformation(final Restaurant restaurant, final String json) {
+
+        final JSONObject informationObject;
+        final JSONObject businessObject;
+        final JSONObject lunchObject;
+        try {
+            informationObject = new JSONObject(json).getJSONObject("information");
+            businessObject = informationObject.getJSONObject("business");
+            lunchObject = informationObject.getJSONObject("lounas");
+        } catch (Exception exception) {
+            Log.e("RefreshTask", "Failed to parse JSON: " + exception);
+            return;
+        }
+
+        final String address = getAddressString(informationObject);
+        if (address == null) {
+            return;
+        } else {
+            restaurant.setAddress(address);
+        }
+
+        final String businessRegular = getRegularHours(businessObject);
+        if (businessRegular == null) {
+            return;
+        } else {
+            restaurant.setBusinessRegular(businessRegular);
+        }
+
+        final String businessException = getExceptions(businessObject);
+        if (businessException == null) {
+            return;
+        } else {
+            restaurant.setBusinessException(businessException);
+        }
+
+        final String lunchRegular = getRegularHours(lunchObject);
+        if (lunchRegular == null) {
+            return;
+        } else {
+            restaurant.setLunchRegular(lunchRegular);
+        }
+
+        final String lunchException = getExceptions(lunchObject);
+        if (lunchException == null) {
+            return;
+        } else {
+            restaurant.setLunchException(lunchException);
+        }
+    }
+
+    private String getAddressString(final JSONObject informationObject) {
+
+        final String address;
+        try {
+            address = informationObject.getString("address")
+                    + "\n"
+                    + informationObject.getString("zip")
+                    + " "
+                    + informationObject.getString("city");
+        } catch (Exception exception) {
+            Log.e("RefreshTask", "Failed to parse JSON: " + exception);
+            return null;
+        }
+
+        return address;
+    }
+
+    private String getRegularHours(final JSONObject informationObject) {
+
+        String regularHoursString = "";
+        try {
+            final JSONArray regularHoursArray = informationObject.getJSONArray("regular");
+
+            for (int i = 0; i < regularHoursArray.length(); i++) {
+
+                final JSONObject regularHoursObject = regularHoursArray.getJSONObject(i);
+
+                final JSONArray whenArray = regularHoursObject.getJSONArray("when");
+                final List<String> days = new ArrayList<String>();
+
+                for (int j = 0; j < whenArray.length(); j++) {
+                    try {
+                        final String day = whenArray.getString(j);
+                        if (day.equals("previous") || day.equals("false")) {
+                            continue;
+                        } else {
+                            days.add(day);
+                        }
+                    } catch (Exception exception) {
+                        // Was boolean literal False, continue.
+                        continue;
+                    }
+                }
+
+                regularHoursString += StringUtil.toCommaSeparatedValues(days)
+                        + ": "
+                        + regularHoursObject.getString("open")
+                        + " - "
+                        + regularHoursObject.getString("close");
+
+                if (i < regularHoursArray.length() - 1) {
+                    //not last round
+                    regularHoursString += "\n";
+                }
+            }
+        } catch (Exception exception) {
+            Log.e("RefreshTask", "Failed to parse JSON: " + exception);
+            return null;
+        }
+
+        return regularHoursString;
+    }
+
+    private String getExceptions(JSONObject informationObject) {
+
+        String exceptionHoursString = "";
+
+        try {
+            final JSONArray exceptionsArray = informationObject.getJSONArray("exception");
+
+            for (int i = 0; i < exceptionsArray.length(); i++) {
+
+                final JSONObject exceptionObject = exceptionsArray.getJSONObject(i);
+
+                final String from = exceptionObject.getString("from");
+                final String to = exceptionObject.getString("to");
+
+                if (from.equals("null") && to.equals("null")) {
+                    continue;
+                }
+
+                exceptionHoursString += from;
+
+                if (!to.equals("null")) {
+                    exceptionHoursString += " - " +  to;
+                }
+
+                exceptionHoursString += ": ";
+
+                final String open = exceptionObject.getString("open");
+                final String close = exceptionObject.getString("close");
+                final boolean closed = exceptionObject.getBoolean("closed");
+
+                if (closed) {
+                    exceptionHoursString += "closed";
+                } else {
+                    exceptionHoursString += open + " - " + close;
+                }
+
+                if (i < exceptionsArray.length() - 1) {
+                    //not last round
+                    exceptionHoursString += "\n";
+                }
+            }
+        } catch (Exception exception) {
+            Log.e("RefreshTask", "Failed to parse JSON: " + exception);
+            return null;
+        }
+
+        return exceptionHoursString;
+
+    }
+
+    private List<Menu> parseMenus(String json) {
 
         final List<Menu> menus = new ArrayList<Menu>();
-        final String json = getJson(BASE_URL + "restaurant/" + restaurantId);
 
         final JSONArray dateArray;
         try {
-             dateArray = new JSONObject(json).getJSONArray("data");
+            dateArray = new JSONObject(json).getJSONArray("data");
         } catch (Exception exception) {
             Log.e("RefreshTask", "Failed to parse JSON: " + exception);
             return menus;
@@ -204,11 +380,11 @@ public class RefreshTask extends AsyncTask<Void, Integer, List<Restaurant>> {
                 listData.clear();
                 listData.addAll(restaurants);
 
-                Log.d("RefreshTask", "listData contains " + listData.size() + " restaurants");
-
                 listAdapter.notifyDataSetChanged();
 
-                fragment.maybeExpandList();
+                if (fragment.shouldExpandGroups()) {
+                    fragment.expandGroups();
+                }
             }
         }
 
