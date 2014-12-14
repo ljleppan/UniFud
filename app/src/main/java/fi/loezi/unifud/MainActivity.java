@@ -1,20 +1,27 @@
 package fi.loezi.unifud;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import fi.loezi.unifud.util.MessiApiHelper;
-import fi.loezi.unifud.task.RefreshTask;
+import java.util.ArrayList;
 
-public class MainActivity extends Activity {
+import fi.loezi.unifud.model.Restaurant;
+import fi.loezi.unifud.task.RefreshTask;
+import fi.loezi.unifud.util.MessiApiHelper;
+
+public class MainActivity extends FragmentActivity {
+
+    private ViewPager pager;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -25,10 +32,16 @@ public class MainActivity extends Activity {
         StrictMode.setThreadPolicy(policy);
 
         setContentView(R.layout.activity_main);
+
+        pager = (ViewPager) findViewById(R.id.pager);
+
+        final PagerAdapter pagerAdapter = new RestaurantListPagerAdapter(this, getSupportFragmentManager(), new ArrayList<Restaurant>());
+        pager.setAdapter(pagerAdapter);
+        pager.setCurrentItem(MessiApiHelper.getDateOffset());
     }
 
     @Override
-    public void onResume() {
+    protected void onResume() {
 
         super.onResume();
 
@@ -36,9 +49,19 @@ public class MainActivity extends Activity {
     }
 
     @Override
+    public void onBackPressed() {
+        if (pager.getCurrentItem() == MessiApiHelper.getDateOffset()) {
+            super.onBackPressed();
+        } else {
+            pager.setCurrentItem(MessiApiHelper.getDateOffset());
+        }
+    }
+
+
+    @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
 
-        getMenuInflater().inflate(R.menu.menu,menu);
+        getMenuInflater().inflate(R.menu.menu, menu);
 
         return true;
     }
@@ -66,9 +89,7 @@ public class MainActivity extends Activity {
 
     private void refresh() {
 
-        final int dateOffset = MessiApiHelper.getDateOffset();
-
-        new RefreshTask(this).execute(dateOffset);
+        new RefreshTask(this).execute();
     }
 
     public void showAboutDialog() {

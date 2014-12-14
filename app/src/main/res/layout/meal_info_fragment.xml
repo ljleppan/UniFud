@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent" >
+
+    <TextView
+        android:id="@+id/name"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000"
+        android:padding="5dp"
+        android:gravity="center"
+        android:layout_below="@+id/name"/>
+
+    <TextView
+        android:id="@+id/diets"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000"
+        android:padding="5dp"
+        android:gravity="center"
+        android:layout_below="@+id/name"/>
+
+    <TextView
+        android:id="@+id/specialContents"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000"
+        android:padding="5dp"
+        android:gravity="center"
+        android:layout_below="@+id/diets"/>
+
+    <TextView
+        android:id="@+id/notes"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000"
+        android:padding="5dp"
+        android:gravity="center"
+        android:layout_below="@+id/specialContents"/>
+
+    <TextView
+        android:id="@+id/ingredients"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000"
+        android:padding="5dp"
+        android:gravity="center"
+        android:layout_below="@+id/notes"/>
+
+    <TextView
+        android:id="@+id/nutritions"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#000"
+        android:padding="5dp"
+        android:gravity="center"
+        android:layout_below="@+id/ingredients"/>
+
+    <Button
+        android:id="@+id/dialogButtonOK"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/dialog_close"
+        android:layout_below="@+id/nutritions" />
+
+</RelativeLayout>

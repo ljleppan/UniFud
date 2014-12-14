@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
-import android.widget.ExpandableListView;
 import android.widget.ProgressBar;
 
 import org.apache.http.HttpResponse;
@@ -14,6 +14,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,19 +23,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import fi.loezi.unifud.ExpandableListAdapter;
 import fi.loezi.unifud.R;
+import fi.loezi.unifud.RestaurantListAdapter;
+import fi.loezi.unifud.RestaurantListFragment;
 import fi.loezi.unifud.model.Meal;
+import fi.loezi.unifud.model.Menu;
 import fi.loezi.unifud.model.Restaurant;
 import fi.loezi.unifud.util.MessiApiHelper;
+import fi.loezi.unifud.RestaurantListPagerAdapter;
 
-public class RefreshTask extends AsyncTask<Integer, Integer, List<Restaurant>> {
+public class RefreshTask extends AsyncTask<Void, Integer, List<Restaurant>> {
 
     private static final String BASE_URL = "http://messi.hyyravintolat.fi/publicapi/";
 
     private final HttpClient client;
     private final SharedPreferences preferences;
-    private final ExpandableListView restaurantList;
     private final ProgressBar progressBar;
     private final Activity caller;
 
@@ -42,13 +45,14 @@ public class RefreshTask extends AsyncTask<Integer, Integer, List<Restaurant>> {
 
         this.client = new DefaultHttpClient();
         this.preferences = PreferenceManager.getDefaultSharedPreferences(caller.getBaseContext());
-        this.restaurantList = (ExpandableListView) caller.findViewById(R.id.restaurantList);
         this.progressBar = (ProgressBar) caller.findViewById(R.id.progressBar);
         this.caller = caller;
     }
 
     @Override
-    protected List<Restaurant> doInBackground(final Integer... params) {
+    protected List<Restaurant> doInBackground(final Void... params) {
+
+        publishProgress(0, 1);
 
         final String json = getJson(BASE_URL + "restaurants");
 
@@ -62,16 +66,16 @@ public class RefreshTask extends AsyncTask<Integer, Integer, List<Restaurant>> {
 
                 final JSONObject restaurant = restaurantArray.getJSONObject(i);
 
-                final int areacode = restaurant.getInt("areacode");
-                if(!preferences.getBoolean("show_" + MessiApiHelper.getCampus(areacode), false)) {
+                final int areaCode = restaurant.getInt("areacode");
+                if(!preferences.getBoolean("show_" + MessiApiHelper.getCampus(areaCode), false)) {
                     continue;
                 }
 
                 final int id = restaurant.getInt("id");
                 final String name = restaurant.getString("name");
-                final List<Meal> menu = getMenu(id, params[0]);
+                final List<Menu> menus = getMenus(id);
 
-                restaurants.add(new Restaurant(areacode, id, name, menu));
+                restaurants.add(new Restaurant(areaCode, id, name, menus));
 
                 publishProgress(i + 2, restaurantArray.length() + 1);
             }
@@ -85,31 +89,68 @@ public class RefreshTask extends AsyncTask<Integer, Integer, List<Restaurant>> {
         return restaurants;
     }
 
-    private List<Meal> getMenu(final int restaurantId, final int dayOffset) {
+    private List<Menu> getMenus(final int restaurantId) {
 
+        final List<Menu> menus = new ArrayList<Menu>();
         final String json = getJson(BASE_URL + "restaurant/" + restaurantId);
 
-        final List<Meal> meals = new ArrayList<Meal>();
+        final JSONArray dateArray;
         try {
-            final JSONArray dateArray = new JSONObject(json).getJSONArray("data");
-            final JSONArray mealArray = dateArray.getJSONObject(dayOffset).getJSONArray("data");
-
-            for (int i = 0; i < mealArray.length(); i++) {
-
-                final JSONObject meal = mealArray.getJSONObject(i);
-
-                final String price = meal.getJSONObject("price").getString("name");
-                final String name = meal.getString("name_en");
-
-                meals.add(new Meal(price, name));
-
-            }
-
-        } catch (JSONException exception) {
-            Log.e("RefreshTask", "Failed to fetch/parse JSON" + exception);
+             dateArray = new JSONObject(json).getJSONArray("data");
+        } catch (Exception exception) {
+            Log.e("RefreshTask", "Failed to parse JSON: " + exception);
+            return menus;
         }
 
-        return meals;
+        for (int i = 0; i < 14; i++) {
+
+            final Menu menu = new Menu();
+            try {
+                final JSONObject menuObject = dateArray.getJSONObject(i);
+                menu.setDate(menuObject.getString("date_en"));
+                menu.setMeals(new ArrayList<Meal>());
+
+                final JSONArray mealArray = menuObject.getJSONArray("data");
+                for (int j = 0; j < mealArray.length(); j++) {
+
+                    final JSONObject meal = mealArray.getJSONObject(j);
+
+                    final String price = meal.getJSONObject("price").getString("name");
+                    final String name = meal.getString("name_en");
+                    final String ingredients = meal.getString("ingredients");
+                    final String nutrition = meal.getString("nutrition");
+
+                    final JSONObject metaInfo = meal.getJSONObject("meta");
+
+                    final List<String> diets = new ArrayList<String>();
+                    final JSONArray dietsArray = metaInfo.getJSONArray("0");
+                    for(int k = 0; k < dietsArray.length(); k++) {
+                        diets.add(dietsArray.getString(k));
+                    }
+
+                    final List<String> specialContents = new ArrayList<String>();
+                    final JSONArray specialContentsArray = metaInfo.getJSONArray("1");
+                    for(int k = 0; k < specialContentsArray.length(); k++) {
+                        specialContents.add(specialContentsArray.getString(k));
+                    }
+
+                    final List<String> notes = new ArrayList<String>();
+                    final JSONArray notesArray = metaInfo.getJSONArray("2");
+                    for(int k = 0; k < notesArray.length(); k++) {
+                        notes.add(notesArray.getString(k));
+                    }
+
+                    menu.getMeals().add(new Meal(price, name, ingredients, nutrition, diets, specialContents, notes));
+                }
+
+            } catch (JSONException exception) {
+                Log.e("RefreshTask", "Failed to fetch/parse JSON" + exception);
+            }
+
+            menus.add(menu);
+        }
+
+        return menus;
     }
 
     private String getJson(final String url) {
@@ -149,14 +190,30 @@ public class RefreshTask extends AsyncTask<Integer, Integer, List<Restaurant>> {
     @Override
     protected void onPostExecute(final List<Restaurant> restaurants) {
 
-        final ExpandableListAdapter listAdapter = new ExpandableListAdapter(caller, restaurants);
-        restaurantList.setAdapter(listAdapter);
+        final ViewPager pager = (ViewPager) caller.findViewById(R.id.pager);
+        final RestaurantListPagerAdapter pagerAdapter = (RestaurantListPagerAdapter) pager.getAdapter();
 
-        if (preferences.getBoolean("start_open", false)) {
-            for (int i = 0; i < listAdapter.getGroupCount(); i++) {
-                restaurantList.expandGroup(i);
+        for (int i = 0; i < pagerAdapter.getCount(); i++) {
+
+            RestaurantListFragment fragment = (RestaurantListFragment) pagerAdapter.getItem(i);
+            RestaurantListAdapter listAdapter = fragment.getListAdapter();
+
+            if (listAdapter != null) {
+
+                List<Restaurant> listData = listAdapter.getRestaurants();
+                listData.clear();
+                listData.addAll(restaurants);
+
+                Log.d("RefreshTask", "listData contains " + listData.size() + " restaurants");
+
+                listAdapter.notifyDataSetChanged();
+
+                fragment.maybeExpandList();
             }
         }
+
+        pagerAdapter.notifyDataSetChanged();
+        pager.invalidate();
 
         progressBar.setVisibility(View.INVISIBLE);
     }

@@ -8,7 +8,7 @@
 
         <SwitchPreference
             android:key="start_open"
-            android:title="Start with menus open"
+            android:title="Open menus by default"
             android:defaultValue="false" />
 
     </PreferenceCategory>

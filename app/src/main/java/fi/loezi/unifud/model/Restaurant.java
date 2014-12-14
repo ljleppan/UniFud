@@ -1,36 +1,38 @@
 package fi.loezi.unifud.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
-public class Restaurant implements Comparable<Restaurant> {
+public class Restaurant implements Comparable<Restaurant>, Parcelable {
 
-    private int areacode;
+    private int areaCode;
     private int id;
     private String name;
-    private List<Meal> menu;
+    private List<Menu> menus;
 
-    public Restaurant() {
-    }
+    public Restaurant() { }
 
-    public Restaurant(final int areacode,
+    public Restaurant(final int areaCode,
                       final int id,
                       final String name,
-                      final List<Meal> menu) {
+                      final List<Menu> menus) {
 
-        this.areacode = areacode;
+        this.areaCode = areaCode;
         this.id = id;
         this.name = name;
-        this.menu = menu;
+        this.menus = menus;
     }
 
-    public int getAreacode() {
+    public int getAreaCode() {
 
-        return areacode;
+        return areaCode;
     }
 
-    public void setAreacode(final int areacode) {
+    public void setAreaCode(final int areaCode) {
 
-        this.areacode = areacode;
+        this.areaCode = areaCode;
     }
 
     public int getId() {
@@ -53,20 +55,20 @@ public class Restaurant implements Comparable<Restaurant> {
         this.name = name;
     }
 
-    public List<Meal> getMenu() {
+    public List<Menu> getMenus() {
 
-        return menu;
+        return menus;
     }
 
-    public void setMenu(final List<Meal> menu) {
+    public void setMenus(final List<Menu> menus) {
 
-        this.menu = menu;
+        this.menus = menus;
     }
 
     @Override
     public int compareTo(final Restaurant another) {
 
-        final int areaCodeDifference = this.areacode - another.areacode;
+        final int areaCodeDifference = this.areaCode - another.areaCode;
 
         if (areaCodeDifference != 0) {
             return areaCodeDifference;
@@ -74,4 +76,49 @@ public class Restaurant implements Comparable<Restaurant> {
             return this.name.compareTo(another.name);
         }
     }
+
+    @Override
+    public String toString() {
+
+        return name;
+    }
+
+    /* Parcelable */
+    public Restaurant(final Parcel in) {
+
+        super();
+
+        this.areaCode = in.readInt();
+        this.id = in.readInt();
+        this.name = in.readString();
+        in.readList(this.menus, null);
+    }
+
+    @Override
+    public int describeContents() {
+
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(final Parcel dest, final int flags) {
+
+        dest.writeInt(this.areaCode);
+        dest.writeInt(this.id);
+        dest.writeString(this.name);
+        dest.writeList(this.menus);
+    }
+
+    public static final Parcelable.Creator<Restaurant> CREATOR = new Parcelable.Creator<Restaurant>() {
+
+        public Restaurant createFromParcel(final Parcel in) {
+
+            return new Restaurant(in);
+        }
+
+        public Restaurant[] newArray(final int size) {
+
+            return new Restaurant[size];
+        }
+    };
 }

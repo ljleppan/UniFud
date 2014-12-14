@@ -6,6 +6,9 @@ import java.util.Map;
 
 public class MessiApiHelper {
 
+    public static final int DAYS_VISIBLE = 14;
+    public static final String HIGH_PRICE_INDICATOR = "maukkaasti";
+
     private final static Map<Integer, String> campuses;
 
     static {
@@ -15,7 +18,7 @@ public class MessiApiHelper {
         campuses.put(2, "kumpula");
         campuses.put(3, "meilahti");
         campuses.put(5, "viikki");
-        campuses.put(5, "metropolia");
+        campuses.put(6, "metropolia");
     }
 
     public static String getCampus(int campusId) {

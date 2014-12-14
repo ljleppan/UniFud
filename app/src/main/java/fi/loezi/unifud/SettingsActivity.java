@@ -5,8 +5,6 @@ import android.os.Bundle;
 
 public class SettingsActivity extends Activity {
 
-
-
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
 
