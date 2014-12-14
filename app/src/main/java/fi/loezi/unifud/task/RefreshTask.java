@@ -146,9 +146,7 @@ public class RefreshTask extends AsyncTask<Void, Integer, List<Restaurant>> {
         }
 
         final String lunchException = getExceptions(lunchObject);
-        if (lunchException == null) {
-            return;
-        } else {
+        if (lunchException != null) {
             restaurant.setLunchException(lunchException);
         }
     }
@@ -341,7 +339,6 @@ public class RefreshTask extends AsyncTask<Void, Integer, List<Restaurant>> {
             return null;
         }
 
-        final String json;
         try {
             return EntityUtils.toString(response.getEntity(), "UTF-8");
         } catch (Exception exception) {

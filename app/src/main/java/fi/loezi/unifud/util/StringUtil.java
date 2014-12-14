@@ -2,11 +2,9 @@ package fi.loezi.unifud.util;
 
 import java.util.List;
 
-import fi.loezi.unifud.model.Restaurant;
-
 public class StringUtil {
 
-    public static String toCommaSeparatedValues(final List<? extends Object> items) {
+    public static String toCommaSeparatedValues(final List<?> items) {
 
         if (items == null || items.isEmpty()) {
             return "";
@@ -19,10 +17,5 @@ public class StringUtil {
         }
 
         return string;
-    }
-
-    public static String parseAddressLine(final Restaurant restaurant) {
-
-        return "";
     }
 }

@@ -9,8 +9,6 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import fi.loezi.unifud.model.Restaurant;
-import fi.loezi.unifud.util.StringUtil;
-
 
 public class RestaurantListLongClickListener implements AdapterView.OnItemLongClickListener {
 
@@ -62,7 +60,7 @@ public class RestaurantListLongClickListener implements AdapterView.OnItemLongCl
         nameView.setText(restaurant.toString());
 
         final TextView addressView = (TextView) dialog.findViewById(R.id.address);
-        addressView.setText(StringUtil.parseAddressLine(restaurant));
+        addressView.setText(restaurant.getAddress());
 
         final TextView businessView = (TextView) dialog.findViewById(R.id.business);
         businessView.setText(restaurant.getBusinessRegular());

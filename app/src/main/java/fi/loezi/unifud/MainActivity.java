@@ -35,7 +35,7 @@ public class MainActivity extends FragmentActivity {
 
         pager = (ViewPager) findViewById(R.id.pager);
 
-        final PagerAdapter pagerAdapter = new RestaurantListPagerAdapter(this, getSupportFragmentManager(), new ArrayList<Restaurant>());
+        final PagerAdapter pagerAdapter = new RestaurantListPagerAdapter(getSupportFragmentManager(), new ArrayList<Restaurant>());
         pager.setAdapter(pagerAdapter);
         pager.setCurrentItem(MessiApiHelper.getDateOffset());
     }

@@ -12,13 +12,12 @@
         android:id="@+id/dateDisplay"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
-        android:paddingTop="25px"
-        android:paddingBottom="25px" />
+        android:paddingTop="25dp"
+        android:paddingBottom="25dp" />
 
     <ExpandableListView
         android:id="@+id/restaurantList"
         android:layout_height="fill_parent"
-        android:layout_width="fill_parent"
-        style="@android:style/Widget.Material.ExpandableListView" />
+        android:layout_width="fill_parent" />
 
 </LinearLayout>

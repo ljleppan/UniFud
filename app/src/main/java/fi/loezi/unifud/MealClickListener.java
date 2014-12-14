@@ -12,8 +12,8 @@ import fi.loezi.unifud.util.StringUtil;
 
 public class MealClickListener implements ExpandableListView.OnChildClickListener {
 
-    private RestaurantListAdapter adapter;
-    private Context context;
+    private final RestaurantListAdapter adapter;
+    private final Context context;
 
     public MealClickListener(Context context, RestaurantListAdapter adapter) {
 

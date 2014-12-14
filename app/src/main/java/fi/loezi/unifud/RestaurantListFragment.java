@@ -4,11 +4,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
@@ -32,12 +30,6 @@ public class RestaurantListFragment extends Fragment {
         fragment.setArguments(arguments);
 
         return fragment;
-    }
-
-    @Override
-    public void onCreate(final Bundle savedInstanceState) {
-
-        super.onCreate(savedInstanceState);
     }
 
     @Override

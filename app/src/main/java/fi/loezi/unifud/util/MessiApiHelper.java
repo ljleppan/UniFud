@@ -1,18 +1,18 @@
 package fi.loezi.unifud.util;
 
+import android.util.SparseArray;
+
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 
 public class MessiApiHelper {
 
     public static final int DAYS_VISIBLE = 14;
     public static final String HIGH_PRICE_INDICATOR = "maukkaasti";
 
-    private final static Map<Integer, String> campuses;
+    private final static SparseArray<String> campuses;
 
     static {
-        campuses = new HashMap<Integer, String>();
+        campuses = new SparseArray<String>();
 
         campuses.put(1, "keskusta");
         campuses.put(2, "kumpula");
