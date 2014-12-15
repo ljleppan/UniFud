@@ -92,6 +92,24 @@ public class RestaurantListLongClickListener implements AdapterView.OnItemLongCl
             lunchExceptionsView.setText(restaurant.getLunchException());
         }
 
+        if (!restaurant.getBistroRegular().trim().isEmpty()) {
+            //Has regular bistro hours
+            dialog.findViewById(R.id.bistro_header).setVisibility(View.VISIBLE);
+
+            final TextView bistroView = (TextView) dialog.findViewById(R.id.bistro);
+            bistroView.setVisibility(View.VISIBLE);
+            bistroView.setText(restaurant.getBistroRegular());
+        }
+
+        if (!restaurant.getBistroException().trim().isEmpty()) {
+            //Has bistro exceptions
+            dialog.findViewById(R.id.bistro_header).setVisibility(View.VISIBLE);
+            dialog.findViewById(R.id.bistro_exceptions_header).setVisibility(View.VISIBLE);
+
+            final TextView bistroExceptionView = (TextView) dialog.findViewById(R.id.bistro_exceptions);
+            bistroExceptionView.setVisibility(View.VISIBLE);
+            bistroExceptionView.setText(restaurant.getBistroException());
+        }
 
         final Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
 

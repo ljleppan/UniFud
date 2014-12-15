@@ -15,5 +15,6 @@
     <string name="restaurant_lunch_header">Lunch</string>
     <string name="no_exceptions">none</string>
     <string name="exceptions_header">Exceptions:</string>
+    <string name="restaurant_bistro_header">Bistro</string>
 
 </resources>

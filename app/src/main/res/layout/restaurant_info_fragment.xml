@@ -1,115 +1,168 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent"
+    android:fillViewport="true">
 
-    <TextView
-        android:id="@+id/name"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+    <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#000"
-        android:padding="5dp"
-        android:gravity="center" />
+        android:layout_height="fill_parent" >
 
-    <TextView
-        android:id="@+id/address"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#000"
-        android:padding="5dp"
-        android:gravity="center"
-        android:layout_below="@+id/name"
-        android:layout_marginBottom="5dp"/>
+        <TextView
+            android:id="@+id/name"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:padding="5dp"
+            android:gravity="center" />
 
-    <TextView
-        android:id="@+id/business_header"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#000"
-        android:padding="5dp"
-        android:text="@string/restaurant_business_header"
-        android:gravity="center"
-        android:layout_below="@+id/address"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        <TextView
+            android:id="@+id/address"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:padding="5dp"
+            android:gravity="center"
+            android:layout_below="@+id/name"
+            android:layout_marginBottom="5dp"/>
 
-    <TextView
-        android:id="@+id/business"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#000"
-        android:padding="5dp"
-        android:gravity="center"
-        android:layout_below="@+id/business_header"/>
+        <TextView
+            android:id="@+id/business_header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:padding="5dp"
+            android:text="@string/restaurant_business_header"
+            android:gravity="center"
+            android:layout_below="@+id/address"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <TextView
-        android:id="@+id/business_exceptions_header"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#000"
-        android:text="@string/exceptions_header"
-        android:padding="5dp"
-        android:gravity="center"
-        android:layout_below="@+id/business"
-        android:textStyle="bold" />
+        <TextView
+            android:id="@+id/business"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:padding="5dp"
+            android:gravity="center"
+            android:layout_below="@+id/business_header"/>
 
-    <TextView
-        android:id="@+id/business_exceptions"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#000"
-        android:padding="5dp"
-        android:gravity="center"
-        android:layout_below="@+id/business_exceptions_header"/>
+        <TextView
+            android:id="@+id/business_exceptions_header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:text="@string/exceptions_header"
+            android:padding="5dp"
+            android:gravity="center"
+            android:layout_below="@+id/business"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/lunch_header"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#000"
-        android:padding="5dp"
-        android:text="@string/restaurant_lunch_header"
-        android:gravity="center"
-        android:layout_below="@+id/business_exceptions"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        <TextView
+            android:id="@+id/business_exceptions"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:padding="5dp"
+            android:gravity="center"
+            android:layout_below="@+id/business_exceptions_header"/>
+
+        <TextView
+            android:id="@+id/lunch_header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:padding="5dp"
+            android:text="@string/restaurant_lunch_header"
+            android:gravity="center"
+            android:layout_below="@+id/business_exceptions"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
 
-    <TextView
-        android:id="@+id/lunch"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#000"
-        android:padding="5dp"
-        android:gravity="center"
-        android:layout_below="@+id/lunch_header"/>
+        <TextView
+            android:id="@+id/lunch"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:padding="5dp"
+            android:gravity="center"
+            android:layout_below="@+id/lunch_header"/>
 
-    <TextView
-        android:id="@+id/lunch_exceptions_header"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#000"
-        android:text="@string/exceptions_header"
-        android:padding="5dp"
-        android:gravity="center"
-        android:layout_below="@+id/lunch"
-        android:textStyle="bold" />
+        <TextView
+            android:id="@+id/lunch_exceptions_header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:text="@string/exceptions_header"
+            android:padding="5dp"
+            android:gravity="center"
+            android:layout_below="@+id/lunch"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/lunch_exceptions"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#000"
-        android:padding="5dp"
-        android:gravity="center"
-        android:text="@string/no_exceptions"
-        android:layout_below="@+id/lunch_exceptions_header"/>
+        <TextView
+            android:id="@+id/lunch_exceptions"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:padding="5dp"
+            android:gravity="center"
+            android:text="@string/no_exceptions"
+            android:layout_below="@+id/lunch_exceptions_header"/>
 
-    <Button
-        android:id="@+id/dialogButtonOK"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/dialog_close"
-        android:layout_below="@+id/lunch_exceptions" />
+        <TextView
+            android:id="@+id/bistro_header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:padding="5dp"
+            android:text="@string/restaurant_bistro_header"
+            android:gravity="center"
+            android:layout_below="@+id/lunch_exceptions"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:visibility="gone"/>
 
-</RelativeLayout>
+
+        <TextView
+            android:id="@+id/bistro"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:padding="5dp"
+            android:gravity="center"
+            android:layout_below="@+id/bistro_header"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/bistro_exceptions_header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:text="@string/exceptions_header"
+            android:padding="5dp"
+            android:gravity="center"
+            android:layout_below="@+id/bistro"
+            android:textStyle="bold"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/bistro_exceptions"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:padding="5dp"
+            android:gravity="center"
+            android:text="@string/no_exceptions"
+            android:layout_below="@+id/bistro_exceptions_header"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/dialogButtonOK"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/dialog_close"
+            android:layout_below="@+id/bistro_exceptions" />
+
+    </RelativeLayout>
+</ScrollView>

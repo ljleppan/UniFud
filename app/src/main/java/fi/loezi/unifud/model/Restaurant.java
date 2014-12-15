@@ -16,6 +16,8 @@ public class Restaurant implements Comparable<Restaurant>, Parcelable {
     private String businessException;
     private String lunchRegular;
     private String lunchException;
+    private String bistroRegular;
+    private String bistroException;
 
     public Restaurant() { }
 
@@ -109,6 +111,26 @@ public class Restaurant implements Comparable<Restaurant>, Parcelable {
         this.lunchException = lunchException;
     }
 
+    public String getBistroRegular() {
+
+        return bistroRegular;
+    }
+
+    public void setBistroRegular(final String bistroRegular) {
+
+        this.bistroRegular = bistroRegular;
+    }
+
+    public String getBistroException() {
+
+        return bistroException;
+    }
+
+    public void setBistroException(final String bistroException) {
+
+        this.bistroException = bistroException;
+    }
+
     @Override
     public int compareTo(final Restaurant another) {
 
@@ -141,6 +163,8 @@ public class Restaurant implements Comparable<Restaurant>, Parcelable {
         this.businessException = in.readString();
         this.lunchRegular = in.readString();
         this.lunchException = in.readString();
+        this.bistroRegular = in.readString();
+        this.bistroException = in.readString();
     }
 
     @Override
@@ -161,6 +185,8 @@ public class Restaurant implements Comparable<Restaurant>, Parcelable {
         dest.writeString(this.businessException);
         dest.writeString(this.lunchRegular);
         dest.writeString(this.lunchException);
+        dest.writeString(this.bistroRegular);
+        dest.writeString(this.bistroException);
     }
 
     public static final Parcelable.Creator<Restaurant> CREATOR = new Parcelable.Creator<Restaurant>() {

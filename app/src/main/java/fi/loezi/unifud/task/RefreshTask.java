@@ -108,10 +108,12 @@ public class RefreshTask extends AsyncTask<Void, Integer, List<Restaurant>> {
         final JSONObject informationObject;
         final JSONObject businessObject;
         final JSONObject lunchObject;
+        final JSONObject bistroObject;
         try {
             informationObject = new JSONObject(json).getJSONObject("information");
             businessObject = informationObject.getJSONObject("business");
             lunchObject = informationObject.getJSONObject("lounas");
+            bistroObject = informationObject.getJSONObject("bistro");
         } catch (Exception exception) {
             Log.e("RefreshTask", "Failed to parse JSON: " + exception);
             return;
@@ -146,8 +148,22 @@ public class RefreshTask extends AsyncTask<Void, Integer, List<Restaurant>> {
         }
 
         final String lunchException = getExceptions(lunchObject);
-        if (lunchException != null) {
+        if (lunchException == null) {
+            return;
+        } else {
             restaurant.setLunchException(lunchException);
+        }
+
+        final String bistroRegular = getRegularHours(bistroObject);
+        if (bistroRegular == null) {
+            return;
+        } else {
+            restaurant.setBistroRegular(bistroRegular);
+        }
+
+        final String bistroException = getExceptions(bistroObject);
+        if (bistroException != null) {
+            restaurant.setBistroException(bistroException);
         }
     }
 
