@@ -2,6 +2,7 @@ package fi.loezi.unifud;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.FragmentActivity;
@@ -105,6 +106,16 @@ public class MainActivity extends FragmentActivity {
                 "\n" +
                 "Icons by Freepik and Icon Works from www.flaticon.com, licensed under CC BY 3.0"
         );
+
+        String version = null;
+        try {
+            version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException exception) {
+            version = "unknown";
+        }
+
+        text.append("\n\nVersion " + version);
+
 
         final Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
 
