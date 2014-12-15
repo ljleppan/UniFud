@@ -69,7 +69,7 @@ public class RefreshTask extends AsyncTask<Void, Integer, List<Restaurant>> {
                 final Restaurant restaurant = new Restaurant();
 
                 final int areaCode = restaurantJSON.getInt("areacode");
-                if(!preferences.getBoolean("show_" + MessiApiHelper.getCampus(areaCode), false)) {
+                if(!preferences.getBoolean("show_" + MessiApiHelper.getCampus(areaCode), true)) {
                     continue;
                 }
 
@@ -338,6 +338,7 @@ public class RefreshTask extends AsyncTask<Void, Integer, List<Restaurant>> {
             Log.e("RefreshTask", "Failure when communicating with remote server: " + exception);
             return null;
         }
+
 
         try {
             return EntityUtils.toString(response.getEntity(), "UTF-8");
