@@ -302,7 +302,6 @@ public class RefreshTask extends AsyncTask<Void, Integer, List<Restaurant>> {
         }
 
         return exceptionHoursString;
-
     }
 
     private List<Menu> parseMenus(String json) {
