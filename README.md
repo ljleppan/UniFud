@@ -2,6 +2,9 @@
 ####A Unicafe menu browser for Android
 ------------
 
+###Latest version
+Version 1.1.0, released 2014.12.15
+
 ###Features
  1. Menus fetched directly from source
  2. Allows hiding/showing restaurants on a per-campus basis
@@ -15,8 +18,10 @@ Minimum supported API level 19, mainly because I can't be bothered to check out 
 ###Screenshots!
 [1](http://cs.loezi.fi/unifud/unifud1.png) [2](http://cs.loezi.fi/unifud/unifud2.png) [3](http://cs.loezi.fi/unifud/unifud3.png) [4](http://cs.loezi.fi/unifud/unifud4.png)
 
-### Absolutely no quarantees beta version
-[Clicky!](http://cs.loezi.fi/unifud/app-release.apk)
+### Download
+Please note that this is still very much work in progress and things will be broken.
+
+[Clicky for download!](http://cs.loezi.fi/unifud/app-release.apk)
 
 When things break, please do create an issue.
 
