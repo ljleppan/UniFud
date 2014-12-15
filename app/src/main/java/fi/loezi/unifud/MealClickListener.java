@@ -3,6 +3,7 @@ package fi.loezi.unifud;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
@@ -35,6 +36,7 @@ public class MealClickListener implements ExpandableListView.OnChildClickListene
         }
 
         final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.meal_info_fragment);
 
         final TextView nameView = (TextView) dialog.findViewById(R.id.name);

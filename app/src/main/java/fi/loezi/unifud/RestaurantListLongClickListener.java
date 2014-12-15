@@ -3,6 +3,7 @@ package fi.loezi.unifud;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ExpandableListView;
@@ -54,6 +55,7 @@ public class RestaurantListLongClickListener implements AdapterView.OnItemLongCl
         }
 
         final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.restaurant_info_fragment);
 
         final TextView nameView = (TextView) dialog.findViewById(R.id.name);
