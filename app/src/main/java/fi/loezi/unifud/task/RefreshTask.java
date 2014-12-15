@@ -195,11 +195,31 @@ public class RefreshTask extends AsyncTask<Void, Integer, List<Restaurant>> {
                     }
                 }
 
-                regularHoursString += StringUtil.toCommaSeparatedValues(days)
-                        + ": "
-                        + regularHoursObject.getString("open")
-                        + " - "
-                        + regularHoursObject.getString("close");
+                final String dayString = StringUtil.toCommaSeparatedValues(days);
+                if (!dayString.trim().isEmpty()) {
+                    regularHoursString += dayString;
+                }
+
+                final String open = regularHoursObject.getString("open");
+                final String close = regularHoursObject.getString("close");
+
+                String timeString = null;
+                if (!open.equals("null")
+                        && !open.isEmpty()
+                        && !close.equals("null")
+                        && !close.isEmpty()) {
+
+                    timeString = regularHoursObject.getString("open")
+                            + " - "
+                            + regularHoursObject.getString("close");
+                }
+
+                if (timeString != null) {
+                    if (!dayString.isEmpty()) {
+                        regularHoursString += ": ";
+                    }
+                    regularHoursString += timeString;
+                }
 
                 if (i < regularHoursArray.length() - 1) {
                     //not last round
@@ -223,22 +243,21 @@ public class RefreshTask extends AsyncTask<Void, Integer, List<Restaurant>> {
 
             for (int i = 0; i < exceptionsArray.length(); i++) {
 
+
                 final JSONObject exceptionObject = exceptionsArray.getJSONObject(i);
 
                 final String from = exceptionObject.getString("from");
                 final String to = exceptionObject.getString("to");
 
-                if (from.equals("null") && to.equals("null")) {
-                    continue;
+                if (!from.equals("null") && !from.isEmpty()) {
+                    exceptionHoursString += from;
+
+                    if (!to.equals("null") && !to.isEmpty()) {
+                        exceptionHoursString += " - " +  to;
+                    }
+
+                    exceptionHoursString += ": ";
                 }
-
-                exceptionHoursString += from;
-
-                if (!to.equals("null")) {
-                    exceptionHoursString += " - " +  to;
-                }
-
-                exceptionHoursString += ": ";
 
                 final String open = exceptionObject.getString("open");
                 final String close = exceptionObject.getString("close");
@@ -246,13 +265,19 @@ public class RefreshTask extends AsyncTask<Void, Integer, List<Restaurant>> {
 
                 if (closed) {
                     exceptionHoursString += "closed";
-                } else {
+                } else if (!open.equals("null")
+                        && !open.isEmpty()
+                        && !close.equals("null")
+                        && !close.isEmpty()) {
                     exceptionHoursString += open + " - " + close;
                 }
 
                 if (i < exceptionsArray.length() - 1) {
-                    //not last round
-                    exceptionHoursString += "\n";
+                    //Not last round
+                    if (!exceptionHoursString.endsWith("\n")) {
+                        //Previous round added something
+                        exceptionHoursString += "\n";
+                    }
                 }
             }
         } catch (Exception exception) {
