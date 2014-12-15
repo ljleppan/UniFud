@@ -50,7 +50,7 @@ public class RestaurantListFragment extends Fragment {
         final List<Restaurant> restaurants = getArguments().getParcelableArrayList("restaurants");
         final int position = getArguments().getInt("position");
 
-        String dateString = "No data";
+        String dateString = "Loading...";
         if (restaurants.size() > 0) {
             dateString = restaurants.get(0).getMenus().get(position).getDate();
         }
