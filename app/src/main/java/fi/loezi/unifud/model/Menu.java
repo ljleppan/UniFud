@@ -15,12 +15,6 @@ public class Menu implements Parcelable {
         super();
     }
 
-    public Menu(final List<Meal> meals, final String date) {
-
-        this.meals = meals;
-        this.date = date;
-    }
-
     public String getDate() {
 
         return date;

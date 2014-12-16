@@ -58,57 +58,27 @@ public class RestaurantListLongClickListener implements AdapterView.OnItemLongCl
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.restaurant_info_fragment);
 
-        final TextView nameView = (TextView) dialog.findViewById(R.id.name);
-        nameView.setText(restaurant.toString());
+        getTextView(dialog, R.id.name).setText(restaurant.toString());
+        getTextView(dialog, R.id.address).setText(restaurant.getAddress());
 
-        final TextView addressView = (TextView) dialog.findViewById(R.id.address);
-        addressView.setText(restaurant.getAddress());
+        getTextView(dialog, R.id.business).setText(restaurant.getBusinessRegular());
+        setTextOrHide(restaurant.getBusinessException(), dialog, R.id.business_exceptions, R.id.business_exceptions_header);
 
-        final TextView businessView = (TextView) dialog.findViewById(R.id.business);
-        businessView.setText(restaurant.getBusinessRegular());
+        getTextView(dialog, R.id.lunch).setText(restaurant.getLunchRegular());
+        setTextOrHide(restaurant.getLunchException(), dialog, R.id.lunch_exceptions, R.id.lunch_exceptions_header);
 
-        if (restaurant.getBusinessException().trim().isEmpty()) {
-            dialog.findViewById(R.id.business_exceptions_header).setVisibility(View.GONE);
-            dialog.findViewById(R.id.business_exceptions).setVisibility(View.GONE);
+        setTextOrHide(restaurant.getBistroException(), dialog, R.id.bistro_exceptions, R.id.bistro_exceptions_header);
+        if (restaurant.getBistroRegular().trim().isEmpty() && getTextView(dialog, R.id.bistro_exceptions).getVisibility() == View.GONE) {
+            // No bistro hours or exceptions, everything bistro
+            dialog.findViewById(R.id.bistro_header).setVisibility(View.GONE);
+            dialog.findViewById(R.id.bistro).setVisibility(View.GONE);
         } else {
-            dialog.findViewById(R.id.business_exceptions_header).setVisibility(View.VISIBLE);
-            dialog.findViewById(R.id.business_exceptions).setVisibility(View.VISIBLE);
-
-            final TextView businessExceptionsView = (TextView) dialog.findViewById(R.id.business_exceptions);
-            businessExceptionsView.setText(restaurant.getBusinessException());
-        }
-
-        final TextView lunchView = (TextView) dialog.findViewById(R.id.lunch);
-        lunchView.setText(restaurant.getLunchRegular());
-
-        if (restaurant.getLunchException().trim().isEmpty()) {
-            dialog.findViewById(R.id.lunch_exceptions_header).setVisibility(View.GONE);
-            dialog.findViewById(R.id.lunch_exceptions).setVisibility(View.GONE);
-        } else {
-            dialog.findViewById(R.id.lunch_exceptions_header).setVisibility(View.VISIBLE);
-            dialog.findViewById(R.id.lunch_exceptions).setVisibility(View.VISIBLE);
-
-            final TextView lunchExceptionsView = (TextView) dialog.findViewById(R.id.lunch_exceptions);
-            lunchExceptionsView.setText(restaurant.getLunchException());
-        }
-
-        if (!restaurant.getBistroRegular().trim().isEmpty()) {
-            //Has regular bistro hours
-            dialog.findViewById(R.id.bistro_header).setVisibility(View.VISIBLE);
-
             final TextView bistroView = (TextView) dialog.findViewById(R.id.bistro);
-            bistroView.setVisibility(View.VISIBLE);
-            bistroView.setText(restaurant.getBistroRegular());
-        }
 
-        if (!restaurant.getBistroException().trim().isEmpty()) {
-            //Has bistro exceptions
             dialog.findViewById(R.id.bistro_header).setVisibility(View.VISIBLE);
-            dialog.findViewById(R.id.bistro_exceptions_header).setVisibility(View.VISIBLE);
+            bistroView.setVisibility(View.VISIBLE);
 
-            final TextView bistroExceptionView = (TextView) dialog.findViewById(R.id.bistro_exceptions);
-            bistroExceptionView.setVisibility(View.VISIBLE);
-            bistroExceptionView.setText(restaurant.getBistroException());
+            bistroView.setText(restaurant.getBistroRegular());
         }
 
         final Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
@@ -122,5 +92,31 @@ public class RestaurantListLongClickListener implements AdapterView.OnItemLongCl
 
         dialog.show();
     }
-}
 
+    private void setTextOrHide(final String text, final Dialog parent, final int textViewId, final int headerId) {
+
+        final TextView textView = getTextView(parent, textViewId);
+        final TextView headerView = getTextView(parent, headerId);
+
+        if (text == null || text.trim().equals("null") || text.trim().isEmpty()) {
+            textView.setVisibility(View.GONE);
+            headerView.setVisibility(View.GONE);
+        } else {
+            textView.setVisibility(View.VISIBLE);
+            headerView.setVisibility(View.VISIBLE);
+            textView.setText(text);
+        }
+    }
+
+    private TextView getTextView(final Dialog parent, final int elementId) {
+
+        final View view = parent.findViewById(elementId);
+        if (view == null) {
+            throw new IllegalArgumentException("No element with id " + elementId);
+        } else if (!(view instanceof TextView)) {
+            throw new IllegalArgumentException("Element with id " + elementId + " is not a TextView");
+        }
+
+        return (TextView) view;
+    }
+}

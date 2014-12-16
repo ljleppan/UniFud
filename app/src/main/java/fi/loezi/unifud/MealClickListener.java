@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
+import java.util.List;
+
 import fi.loezi.unifud.model.Meal;
 import fi.loezi.unifud.util.StringUtil;
 
@@ -42,41 +44,11 @@ public class MealClickListener implements ExpandableListView.OnChildClickListene
         final TextView nameView = (TextView) dialog.findViewById(R.id.name);
         nameView.setText(meal.toString());
 
-        final TextView dietsView = (TextView) dialog.findViewById(R.id.diets);
-        dietsView.setText(StringUtil.toCommaSeparatedValues(meal.getDiets()));
-
-        if (meal.getSpecialContents().isEmpty()) {
-            dialog.findViewById(R.id.specialContents).setVisibility(View.GONE);
-        } else {
-            final TextView specialContentsView = (TextView) dialog.findViewById(R.id.specialContents);
-            specialContentsView.setVisibility(View.VISIBLE);
-            specialContentsView.setText(StringUtil.toCommaSeparatedValues(meal.getSpecialContents()));
-        }
-
-        if (meal.getNotes().isEmpty()) {
-            dialog.findViewById(R.id.notes).setVisibility(View.GONE);
-        } else {
-            final TextView notesView = (TextView) dialog.findViewById(R.id.notes);
-            notesView.setVisibility(View.VISIBLE);
-            notesView.setText(StringUtil.toCommaSeparatedValues(meal.getNotes()));
-        }
-
-        if (meal.getIngredients().equals("null")) {
-            dialog.findViewById(R.id.ingredients).setVisibility(View.GONE);
-        } else {
-            final TextView ingredientsView = (TextView) dialog.findViewById(R.id.ingredients);
-            ingredientsView.setVisibility(View.VISIBLE);
-            ingredientsView.setText(meal.getIngredients());
-        }
-
-        if (meal.getNutrition().equals("null")) {
-            dialog.findViewById(R.id.nutritions).setVisibility(View.GONE);
-        } else {
-            final TextView nutritionsView = (TextView) dialog.findViewById(R.id.nutritions);
-            nutritionsView.setVisibility(View.VISIBLE);
-            nutritionsView.setText(meal.getNutrition());
-        }
-
+        setTextOrHide(meal.getDiets(), dialog, R.id.diets);
+        setTextOrHide(meal.getSpecialContents(), dialog, R.id.specialContents);
+        setTextOrHide(meal.getNotes(), dialog, R.id.notes);
+        setTextOrHide(meal.getIngredients(), dialog, R.id.ingredients);
+        setTextOrHide(meal.getNutrition(), dialog, R.id.nutritions);
 
         final Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
 
@@ -90,5 +62,30 @@ public class MealClickListener implements ExpandableListView.OnChildClickListene
         dialog.show();
 
         return true;
+    }
+
+    private void setTextOrHide(final List<String> listOfStrings, final Dialog parent, final int elementId) throws IllegalArgumentException {
+
+        final String text = StringUtil.toCommaSeparatedValues(listOfStrings);
+        setTextOrHide(text, parent, elementId);
+    }
+
+    private void setTextOrHide(final String text, final Dialog parent, final int elementId) throws IllegalArgumentException{
+
+        final View view = parent.findViewById(elementId);
+        if (view == null) {
+            throw new IllegalArgumentException("No element with id " + elementId);
+        } else if (!(view instanceof TextView)) {
+            throw new IllegalArgumentException("Element with id " + elementId + " is not a TextView");
+        }
+
+        final TextView textView = (TextView) view;
+
+        if (text == null || text.trim().equals("null") || text.trim().isEmpty()) {
+            textView.setVisibility(View.GONE);
+        } else {
+            textView.setVisibility(View.VISIBLE);
+            textView.setText(text);
+        }
     }
 }
