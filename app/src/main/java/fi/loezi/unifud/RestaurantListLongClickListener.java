@@ -10,6 +10,8 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import fi.loezi.unifud.model.Restaurant;
+import fi.loezi.unifud.util.hoursFormatter.ExceptionalHoursFormatter;
+import fi.loezi.unifud.util.hoursFormatter.RegularHoursFormatter;
 
 public class RestaurantListLongClickListener implements AdapterView.OnItemLongClickListener {
 
@@ -61,14 +63,22 @@ public class RestaurantListLongClickListener implements AdapterView.OnItemLongCl
         getTextView(dialog, R.id.name).setText(restaurant.toString());
         getTextView(dialog, R.id.address).setText(restaurant.getAddress());
 
-        getTextView(dialog, R.id.business).setText(restaurant.getBusinessRegular());
-        setTextOrHide(restaurant.getBusinessException(), dialog, R.id.business_exceptions, R.id.business_exceptions_header);
+        final String businessRegular = RegularHoursFormatter.toString(restaurant.getBusinessRegular());
+        getTextView(dialog, R.id.business).setText(businessRegular);
 
-        getTextView(dialog, R.id.lunch).setText(restaurant.getLunchRegular());
-        setTextOrHide(restaurant.getLunchException(), dialog, R.id.lunch_exceptions, R.id.lunch_exceptions_header);
+        final String businessExceptional = ExceptionalHoursFormatter.toString(restaurant.getBusinessException());
+        setTextOrHide(businessExceptional, dialog, R.id.business_exceptions, R.id.business_exceptions_header);
 
-        setTextOrHide(restaurant.getBistroException(), dialog, R.id.bistro_exceptions, R.id.bistro_exceptions_header);
-        if (restaurant.getBistroRegular().trim().isEmpty() && getTextView(dialog, R.id.bistro_exceptions).getVisibility() == View.GONE) {
+        final String lunchRegular = RegularHoursFormatter.toString(restaurant.getLunchRegular());
+        getTextView(dialog, R.id.lunch).setText(lunchRegular);
+
+        final String lunchExceptional = ExceptionalHoursFormatter.toString(restaurant.getLunchException());
+        setTextOrHide(lunchExceptional, dialog, R.id.lunch_exceptions, R.id.lunch_exceptions_header);
+
+        final String bistroRegular = RegularHoursFormatter.toString(restaurant.getBistroRegular());
+        final String bistroExceptional = ExceptionalHoursFormatter.toString(restaurant.getBistroException());
+        setTextOrHide(bistroExceptional, dialog, R.id.bistro_exceptions, R.id.bistro_exceptions_header);
+        if (bistroRegular.isEmpty() && getTextView(dialog, R.id.bistro_exceptions).getVisibility() == View.GONE) {
             // No bistro hours or exceptions, everything bistro
             dialog.findViewById(R.id.bistro_header).setVisibility(View.GONE);
             dialog.findViewById(R.id.bistro).setVisibility(View.GONE);
@@ -78,7 +88,7 @@ public class RestaurantListLongClickListener implements AdapterView.OnItemLongCl
             dialog.findViewById(R.id.bistro_header).setVisibility(View.VISIBLE);
             bistroView.setVisibility(View.VISIBLE);
 
-            bistroView.setText(restaurant.getBistroRegular());
+            bistroView.setText(bistroRegular);
         }
 
         final Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
