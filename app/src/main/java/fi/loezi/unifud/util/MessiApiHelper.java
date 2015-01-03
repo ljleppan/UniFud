@@ -19,6 +19,7 @@ public class MessiApiHelper {
         campuses.put(3, "meilahti");
         campuses.put(5, "viikki");
         campuses.put(6, "metropolia");
+        campuses.put(999, "finedining");
     }
 
     public static String getCampus(int campusId) {

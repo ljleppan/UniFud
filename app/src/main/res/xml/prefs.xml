@@ -42,5 +42,10 @@
             android:title="Metropolia"
             android:defaultValue="true" />
 
+        <SwitchPreference
+            android:key="show_finedining"
+            android:title="Fine dining"
+            android:defaultValue="true" />
+
     </PreferenceCategory>
 </PreferenceScreen>
