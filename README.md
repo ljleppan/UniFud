@@ -3,7 +3,7 @@
 ------------
 
 ###Latest version
-Version 1.1.0, released 2014.12.15
+Version 1.2.0, released 2015.01.03
 
 ###Features
  1. Menus fetched directly from source
