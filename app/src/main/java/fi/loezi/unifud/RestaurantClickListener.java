@@ -4,53 +4,26 @@ import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
 import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import fi.loezi.unifud.model.Restaurant;
 import fi.loezi.unifud.util.hoursFormatter.ExceptionalHoursFormatter;
 import fi.loezi.unifud.util.hoursFormatter.RegularHoursFormatter;
 
-public class RestaurantListLongClickListener implements AdapterView.OnItemLongClickListener {
+public class RestaurantClickListener implements View.OnClickListener {
 
-    private final RestaurantListAdapter adapter;
     private final Context context;
+    private final Restaurant restaurant;
 
-    public RestaurantListLongClickListener(final Context context, final RestaurantListAdapter adapter) {
+    public RestaurantClickListener(final Context context, final Restaurant restaurant) {
 
         this.context = context;
-        this.adapter = adapter;
+        this.restaurant = restaurant;
     }
 
     @Override
-    public boolean onItemLongClick(final AdapterView<?> parent,
-                                   final View view,
-                                   final int position,
-                                   final long id) {
-
-        final int itemType = ExpandableListView.getPackedPositionType(id);
-
-        if (itemType == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
-
-            return false;
-        }
-
-        if (itemType == ExpandableListView.PACKED_POSITION_TYPE_GROUP) {
-
-            final int groupPosition = ExpandableListView.getPackedPositionGroup(id);
-            restaurantLongClick(groupPosition);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    private void restaurantLongClick(final int groupPosition) {
-
-        final Restaurant restaurant = (Restaurant) adapter.getGroup(groupPosition);
+    public void onClick(final View v) {
 
         if (restaurant == null) {
             return;

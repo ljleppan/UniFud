@@ -63,7 +63,6 @@ public class RestaurantListFragment extends Fragment {
             list.setAdapter(listAdapter);
         }
 
-        list.setOnItemLongClickListener(new RestaurantListLongClickListener(getActivity(), listAdapter));
         list.setOnChildClickListener(new MealClickListener(getActivity(), listAdapter));
 
         if(shouldExpandGroups()) {

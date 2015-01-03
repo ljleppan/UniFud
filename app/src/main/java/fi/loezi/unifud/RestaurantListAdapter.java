@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import fi.loezi.unifud.model.Meal;
@@ -118,6 +119,9 @@ public class RestaurantListAdapter extends BaseExpandableListAdapter {
         final TextView restaurantName = (TextView) convertView.findViewById(R.id.restaurantName);
         restaurantName.setTypeface(null, Typeface.BOLD);
         restaurantName.setText(restaurant.toString());
+
+        final ImageView infoButton = (ImageView) convertView.findViewById(R.id.infoButton);
+        infoButton.setOnClickListener(new RestaurantClickListener(context, restaurant));
 
         return convertView;
     }
